@@ -1,0 +1,76 @@
+<div class="container">
+
+  <h1>Forms</h1>
+
+  <div *ngIf="hideForm">
+    <div *ngFor="let el of userData;index as i">
+      <div class="card" style="width: 18rem;">
+        <h5 class="card-title">Name: {{el.userName}}</h5>
+        <p class="card-text">Email: {{el.email}}</p>
+        <p class="card-text">Phone: {{el.phone}}</p>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!hideForm">
+    <fieldset>
+      <legend>Enter quantity of forms (from 1 to 10)</legend>
+      <input [(ngModel)]="inputArr" #inp type="number" min="1" max="10"><button (click)="createForms()">Create</button>
+    </fieldset>
+
+
+    <div *ngIf="open">
+      <div class="container" *ngFor="let el of quantity; index as i;trackBy">
+        <form *ngIf="!hideForm" #userForm="ngForm">
+
+          <button (click)="close(i)" type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+
+          <h2>Form #{{i+1}}</h2>
+
+          <div class="form-group">
+            <label>Name</label>
+            <input type="text" required #name="ngModel" [class.is-invalid]="name.invalid" class="form-control" name="userName"
+              ngModel>
+            <small *ngIf="name.invalid" class="text-danger">Name field is required</small>
+          </div>
+
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" required #email="ngModel" [class.is-invalid]="email.invalid" class="form-control" name="email"
+              ngModel pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?">
+            <div *ngIf="email.errors && email.invalid">
+              <small *ngIf="email.errors.required" class="text-danger">Email field is required</small>
+              <small *ngIf="email.errors.pattern" class="text-danger">Enter correct email</small>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Phone</label>
+            <input type="tel" pattern="^\d{10}$" required #phone="ngModel" class="form-control" [class.is-invalid]="phone.invalid"
+              name="phone" ngModel>
+            <div *ngIf="phone.errors && phone.invalid">
+              <small *ngIf="phone.errors.required" class="text-danger">Phone field is required</small>
+              <small *ngIf="phone.errors.pattern" class="text-danger">Phone field has to be 10 digits</small>
+            </div>
+          </div>
+
+          <button [style.cursor]="userForm.form.invalid ? 'no-drop'  : 'pointer'" [disabled]="userForm.form.invalid"
+            class="btn btn-primary" type="submit" (click)="submitted(userForm.value, i)">Submit form</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <!-- <div *ngIf="hideForm">
+    <div *ngFor="let el of userData; index as i">
+      <p>Name: {{userData[i].userName}}</p>
+      <p>Email: {{userData[i].email}}</p>
+      <p>Phone: {{userData[i].phone}}</p>
+    </div>
+  </div>
+</div> -->
